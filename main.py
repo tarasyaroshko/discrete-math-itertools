@@ -1,1 +1,3 @@
-
+"""
+ITERTOOLS IMPLEMENTATION
+"""
