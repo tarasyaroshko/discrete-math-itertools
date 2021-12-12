@@ -6,7 +6,7 @@ ITERTOOLS IMPLEMENTATION
 
 
 def combinations_with_replacement(string_of_elements, amount_of_el):
-    #Implomenta an analogue of itertools combinations with replacement
+    #Imploments an analogue of itertools combinations with replacement
     index_list = [0] * amount_of_el
     list_of_elements = tuple(string_of_elements)
     edge_of_elements = len(list_of_elements) - 1
