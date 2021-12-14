@@ -1,7 +1,32 @@
 """
 ITERTOOLS IMPLEMENTATION
 """
+def count(start=0, step=1):
+    """
+    Returns the iterator of an infinite loop on integers.
+    (start, start+1*step, start+2*step, ...)
+    >>> next(count(start=5, step=3))
+    5
+    """
+    i = 0
+    while True:
+        yield start + i*step
+        i += 1
 
+def cycle(iterable):
+    """
+    Returns an infinite iterator on the iterator content cycle.
+    """
+    while True:
+        for element in iterable:
+            yield element
+
+def repeat(value):
+    """
+    Returns an infinite iterator of duplicate values.
+    """
+    while True:
+        yield value
 
 
 
