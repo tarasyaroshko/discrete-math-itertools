@@ -84,3 +84,25 @@ def product(*args, repeat=1):
     new_lst = [elem3 for elem3 in lst2 if len(elem3) == (len(args)*repeat)]
     for elem4 in new_lst:
         yield tuple(elem4)
+
+def combinations(iterable, r):
+    """return generator with all combinations
+    of r elemnets from iterable"""
+    input_it=tuple(iterable)
+    n=len(input_it)
+    if r>n:
+        return
+    ourange=[i for i in range(r)]
+    yield tuple(input_it[i] for i in ourange)
+    while True:
+        y=0
+        for i in reversed(range(r)):
+            if ourange[i] != i + n - r:
+                y=1
+                break
+        if y==0:
+            return
+        ourange[i] += 1
+        for j in range(i+1, r):
+            ourange[j] = ourange[j-1] + 1
+        yield tuple(input_it[i] for i in ourange)
