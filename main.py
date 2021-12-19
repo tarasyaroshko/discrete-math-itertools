@@ -75,7 +75,7 @@ def product(*args, repeat=1):
 
 def combinations(r, n):
     """return generator with all combinations
-    of r elemnets from iterable"""
+    of r elemnets from range(n)"""
     if r>n:
         return
     ourange=[i for i in range(r)]
