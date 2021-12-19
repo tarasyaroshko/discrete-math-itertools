@@ -73,15 +73,13 @@ def product(*args, repeat=1):
 
 
 
-def combinations(iterable, r):
+def combinations(r, n):
     """return generator with all combinations
     of r elemnets from iterable"""
-    input_it=tuple(iterable)
-    n=len(input_it)
     if r>n:
         return
     ourange=[i for i in range(r)]
-    yield tuple(input_it[i] for i in ourange)
+    yield tuple(i for i in ourange)
     while True:
         y=0
         for i in reversed(range(r)):
@@ -93,7 +91,7 @@ def combinations(iterable, r):
         ourange[i] += 1
         for j in range(i+1, r):
             ourange[j] = ourange[j-1] + 1
-        yield tuple(input_it[i] for i in ourange)
+        yield tuple(i for i in ourange)
 
 
 
