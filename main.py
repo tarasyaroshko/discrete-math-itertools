@@ -1,12 +1,16 @@
 """
 ITERTOOLS IMPLEMENTATION
 """
+
 def count(start=0, step=1):
     """
     Returns the iterator of an infinite loop on integers.
     (start, start+1*step, start+2*step, ...)
     >>> next(count(start=5, step=3))
     5
+    >>> gen = count(1, 2)
+    >>> list(next(gen) for _ in range(5))
+    [1, 3, 5, 7, 9]
     """
     i = 0
     while True:
@@ -16,6 +20,9 @@ def count(start=0, step=1):
 def cycle(iterable):
     """
     Returns an infinite iterator on the iterator content cycle.
+    >>> gen = cycle("ABC")
+    >>> list(next(gen) for _ in range(6))
+    ['A', 'B', 'C', 'A', 'B', 'C']
     """
     while True:
         for element in iterable:
@@ -49,10 +56,12 @@ def permutations(iterable, length=None):
 def repeat(value):
     """
     Returns an infinite iterator of duplicate values.
+    >>> gen = repeat("hello")
+    >>> list(next(gen) for _ in range(3))
+    ['hello', 'hello', 'hello']
     """
     while True:
         yield value
-
 
 def product(*args):
     """
