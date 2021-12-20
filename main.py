@@ -96,7 +96,7 @@ def combinations(r, n):
 
 def combinations_with_replacement(string_of_elements, amount_of_el):
     '''
-    Imploments an analogue of itertools combinations with replacement
+    Implements an analogue of itertools combinations with replacement
     '''
     index_list = [0] * amount_of_el # making an empty list to make combinations easily
     list_of_elements = tuple(string_of_elements) # splitting elements to make combinations with them
