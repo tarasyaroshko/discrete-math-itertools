@@ -94,15 +94,20 @@ def combinations(r, n):
         yield tuple(i for i in ourange)
 
 
-
 def combinations_with_replacement(string_of_elements, amount_of_el):
-    #Imploments an analogue of itertools combinations with replacement
-    index_list = [0] * amount_of_el
-    list_of_elements = tuple(string_of_elements)
-    edge_of_elements = len(list_of_elements) - 1
-    yield tuple(list_of_elements[i] for i in index_list)
-    while index_list != [edge_of_elements] * amount_of_el:
-        for index in range(amount_of_el - 1, -1, -1):
-            if index_list[index] != edge_of_elements: break
-        index_list[index:] = [index_list[index] + 1] * (amount_of_el - index)
-        yield tuple(list_of_elements[i] for i in index_list)
+    '''
+    Imploments an analogue of itertools combinations with replacement
+    '''
+    index_list = [0] * amount_of_el # making an empty list to make combinations easily
+    list_of_elements = tuple(string_of_elements) # splitting elements to make combinations with them
+    edge_of_elements = len(list_of_elements) - 1 # the last index of the list string_of_elements
+    yield tuple(list_of_elements[i] for i in index_list)    # records the first combination
+    while index_list != [edge_of_elements] * amount_of_el:  # while we didn't reach the last element of
+                                                            # string_of_elements to make combinations with them
+        for index in range(amount_of_el - 1, -1, -1): # iterating in reversed index_list and if...
+            if index_list[index] != edge_of_elements: break # an element with a particular
+                                                            # index isn't out of range...
+        index_list[index:] = [index_list[index] + 1] * (amount_of_el - index) # we make a combination on that position
+                                                            # and if an element is out of range, we move on to the next
+                                                            # element in a reversed index_list 
+        yield tuple(list_of_elements[i] for i in index_list) # records each combination
