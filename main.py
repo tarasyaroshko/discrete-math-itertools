@@ -59,7 +59,7 @@ def product(*args, repeat=1):
  ('C', 'C', 'A'), ('C', 'C', 'B'), ('C', 'C', 'C')]
     """
     lst = []
-    for rep in range(repeat):
+    for _ in range(repeat):
         for i in args:
             lst.append(tuple(i))
     lst2 = [[]]
