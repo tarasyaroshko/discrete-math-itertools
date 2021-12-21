@@ -28,31 +28,6 @@ def cycle(iterable):
         for element in iterable:
             yield element
 
-def permutations(iterable, length=None):
-    if length is None:                  # If length is not specified,
-        length = len(list(iterable))    # we assign it as length of our iterable
-    if length > len(list(iterable)):
-        # print "Your r cannot be longer than length of the iterable"
-        return # If the length is longer length of our iterable, it is a mistake
-                # so we return nothing
-    list_of_index = list(range(len(list(iterable))))
-    list_of_cycles = list(
-        range(len(list(iterable)), len(list(iterable))-length, -1))
-    yield(tuple(list(iterable)[i] for i in list_of_index[:length]))
-    while len(list(iterable)):
-        for i in reversed(range(length)):
-            list_of_cycles[i] -= 1
-            if list_of_cycles[i] == 0:
-                list_of_index[i:] = list_of_index[i+1:] + list_of_index[i:i+1]
-                list_of_cycles[i] = len(list(iterable)) - i
-            else:
-                j = list_of_cycles[i]
-                list_of_index[i], list_of_index[-j] = list_of_index[-j], list_of_index[i]
-                yield(tuple(list(iterable)[i] for i in list_of_index[:length]))
-                break
-        else:
-            return
-
 def repeat(value):
     """
     Returns an infinite iterator of duplicate values.
@@ -86,6 +61,33 @@ def product(*args):
     for elem4 in new_lst:
         yield tuple(elem4)
 
+def permutations(iterable, length=None):
+    if length is None:                  # If length is not specified,
+        length = len(list(iterable))    # we assign it as length of our iterable
+    if length > len(list(iterable)):
+        # print "Your r cannot be longer than length of the iterable"
+        return # If the length is longer length of our iterable, it is a mistake
+                # so we return nothing
+    list_of_index = list(range(len(list(iterable))))
+    list_of_cycles = list(
+        range(len(list(iterable)), len(list(iterable))-length, -1))
+    yield(tuple(list(iterable)[i] for i in list_of_index[:length]))
+    # Yielding the first tuple of possible permutations,
+    # which will be output in a correct order as it is only our first
+    # return and we are not changing the order so far
+    while len(list(iterable)):
+        for i in reversed(range(length)):
+            list_of_cycles[i] -= 1
+            if list_of_cycles[i] == 0:
+                list_of_index[i:] = list_of_index[i+1:] + list_of_index[i:i+1]
+                list_of_cycles[i] = len(list(iterable)) - i
+            else:
+                j = list_of_cycles[i]
+                list_of_index[i], list_of_index[-j] = list_of_index[-j], list_of_index[i]
+                yield(tuple(list(iterable)[i] for i in list_of_index[:length]))
+                break
+        else:
+            return
 
 
 def combinations(r, n):
