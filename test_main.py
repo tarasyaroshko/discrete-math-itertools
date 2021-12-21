@@ -18,6 +18,8 @@ class TestCalc(unittest.TestCase):
                           ('C', 'x', '2'), ('C', 'y', '1'), ('C', 'y', '2'),
                           ('D', 'x', '1'), ('D', 'x', '2'), ('D', 'y', '1'),
                           ('D', 'y', '2')])
+        self.assertFalse(len(tuple(main.product())) > 1)
+        self.assertEqual(list(main.product(range(3))),  [(0,), (1,), (2,)])
         self.assertIn(('A', 'x'), list(main.product('ABCD', 'xy')))
         self.assertNotIn(('A', 'A'), list(main.product('ABCD', 'xy')))
 
@@ -26,9 +28,18 @@ class TestCalc(unittest.TestCase):
                          (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1)])
         self.assertEqual(list(main.permutations(['f', 'p', 'n'], 3)), [('f', 'p', 'n'), (
             'f', 'n', 'p'), ('p', 'f', 'n'), ('p', 'n', 'f'), ('n', 'f', 'p'), ('n', 'p', 'f')])
+        self.assertTrue(('a', 'a', 'b') not in list(
+            main.permutations(['a', 'b', 'c'], 3)))
 
     def test_combinations(self):
-        pass
+        self.assertEqual(tuple(main.combinations(3, 4)),
+                         ((0, 1, 2), (0, 1, 3), (0, 2, 3), (1, 2, 3)))
+        self.assertEqual(tuple(main.combinations(5, 7)), ((0, 1, 2, 3, 4), (0, 1, 2, 3, 5), (0, 1, 2, 3, 6),
+                                                          (0, 1, 2, 4, 5), (0, 1, 2, 4, 6), (0, 1, 2, 5, 6), (
+                                                              0, 1, 3, 4, 5), (0, 1, 3, 4, 6), (0, 1, 3, 5, 6),
+                                                          (0, 1, 4, 5, 6), (0, 2, 3, 4, 5), (0, 2, 3, 4, 6), (
+                                                              0, 2, 3, 5, 6), (0, 2, 4, 5, 6), (0, 3, 4, 5, 6),
+                                                          (1, 2, 3, 4, 5), (1, 2, 3, 4, 6), (1, 2, 3, 5, 6), (1, 2, 4, 5, 6), (1, 3, 4, 5, 6), (2, 3, 4, 5, 6)))
         # self.assertEqual(list(main.combinations('ABCD', 2)),
         #                  [('A', 'B'), ('A', 'C'), ('A', 'D'), ('B', 'C'), ('B', 'D'), ('C', 'D')])
 
