@@ -40,7 +40,7 @@ def repeat(value):
 
 def product(*args):
     """
-    Return the cartesian product of input iterables. 
+    Return the cartesian product of input iterables.
     >>> list(product('ABCD', 'xy', '12'))
     [('A', 'x', '1'), ('A', 'x', '2'), ('A', 'y', '1'),\
  ('A', 'y', '2'), ('B', 'x', '1'), ('B', 'x', '2'),\
@@ -69,13 +69,24 @@ def product(*args):
         yield tuple(elem4)
 
 def permutations(iterable, length=None):
+    """
+    Return r length subsequences of elements from the input iterable
+    >>> list(permutations('ABCD', 2))
+    [('A', 'B'), ('A', 'C'), ('A', 'D'), ('B', 'A'), ('B', 'C'), \
+('B', 'D'), ('C', 'A'), ('C', 'B'), ('C', 'D'), ('D', 'A'), ('D', 'B'), ('D', 'C')]
+    """
     if length is None:                  # If length is not specified,
-        length = len(list(iterable))    # we assign it as length of our iterable
-    if length > len(list(iterable)):
+        # we assign it as length of our iterable
+        length = len(tuple(iterable))
+    if length > len(tuple(iterable)):
         # print "Your r cannot be longer than length of the iterable"
-        return # If the length is longer length of our iterable, it is a mistake
-                # so we return nothing
+        return  # If the length is longer length of our iterable, it is a mistake
+        # so we return nothing
+    # Getting the list of indices starting from zero
     list_of_index = list(range(len(list(iterable))))
+    # Getting the list of cycles which is in reversed order from
+    # the length of the iterable with the step of -1 with
+    # length amount of times
     list_of_cycles = list(
         range(len(list(iterable)), len(list(iterable))-length, -1))
     yield(tuple(list(iterable)[i] for i in list_of_index[:length]))
@@ -83,18 +94,27 @@ def permutations(iterable, length=None):
     # which will be output in a correct order as it is only our first
     # return and we are not changing the order so far
     while len(list(iterable)):
+        # Reversing the range(length) to iterate from the highest number
         for i in reversed(range(length)):
+            # But before our next examination, we are a having a different
+            # list of cycles
             list_of_cycles[i] -= 1
             if list_of_cycles[i] == 0:
+                # Puts the ith item of indices at the end,
+                # Shifts all following items of indices one to the left, and indicates that the next time we come to this item of cycles
+                # we are be swapping the new ith item of indices (from the left) with the n - ith one (from the right)
                 list_of_index[i:] = list_of_index[i+1:] + list_of_index[i:i+1]
                 list_of_cycles[i] = len(list(iterable)) - i
             else:
+                # If cycles[i] is j, this means that the next update to the indices is to swap the i-th one (from the left)
+                # with the j-th one from the right (if j is 1, then the last element of indices is being swapped -- indices[-1])
                 j = list_of_cycles[i]
                 list_of_index[i], list_of_index[-j] = list_of_index[-j], list_of_index[i]
                 yield(tuple(list(iterable)[i] for i in list_of_index[:length]))
                 break
         else:
             return
+
 
 
 def combinations(r, n):
