@@ -1,12 +1,16 @@
 """
 ITERTOOLS IMPLEMENTATION
 """
+
 def count(start=0, step=1):
     """
     Returns the iterator of an infinite loop on integers.
     (start, start+1*step, start+2*step, ...)
     >>> next(count(start=5, step=3))
     5
+    >>> gen = count(1, 2)
+    >>> list(next(gen) for _ in range(5))
+    [1, 3, 5, 7, 9]
     """
     i = 0
     while True:
@@ -16,6 +20,9 @@ def count(start=0, step=1):
 def cycle(iterable):
     """
     Returns an infinite iterator on the iterator content cycle.
+    >>> gen = cycle("ABC")
+    >>> list(next(gen) for _ in range(6))
+    ['A', 'B', 'C', 'A', 'B', 'C']
     """
     while True:
         for element in iterable:
@@ -24,13 +31,14 @@ def cycle(iterable):
 def repeat(value):
     """
     Returns an infinite iterator of duplicate values.
+    >>> gen = repeat("hello")
+    >>> list(next(gen) for _ in range(3))
+    ['hello', 'hello', 'hello']
     """
     while True:
         yield value
 
- 
-
-def product(*args, repeat=1):
+def product(*args):
     """
     Return the cartesian product of input iterables. 
     >>> list(product('ABCD', 'xy', '12'))
@@ -40,37 +48,53 @@ def product(*args, repeat=1):
  ('C', 'x', '2'), ('C', 'y', '1'), ('C', 'y', '2'),\
  ('D', 'x', '1'), ('D', 'x', '2'), ('D', 'y', '1'),\
  ('D', 'y', '2')]
-    >>> list(product(range(3), repeat=3))
-    [(0, 0, 0), (0, 0, 1), (0, 0, 2), (0, 1, 0),\
- (0, 1, 1), (0, 1, 2), (0, 2, 0), (0, 2, 1), (0, 2, 2),\
- (1, 0, 0), (1, 0, 1), (1, 0, 2), (1, 1, 0), (1, 1, 1),\
- (1, 1, 2), (1, 2, 0), (1, 2, 1), (1, 2, 2), (2, 0, 0),\
- (2, 0, 1), (2, 0, 2), (2, 1, 0), (2, 1, 1), (2, 1, 2),\
- (2, 2, 0), (2, 2, 1), (2, 2, 2)]
-    >>> list(product('ABC', repeat=3))
-    [('A', 'A', 'A'), ('A', 'A', 'B'), ('A', 'A', 'C'),\
- ('A', 'B', 'A'), ('A', 'B', 'B'), ('A', 'B', 'C'),\
- ('A', 'C', 'A'), ('A', 'C', 'B'), ('A', 'C', 'C'),\
- ('B', 'A', 'A'), ('B', 'A', 'B'), ('B', 'A', 'C'),\
- ('B', 'B', 'A'), ('B', 'B', 'B'), ('B', 'B', 'C'),\
- ('B', 'C', 'A'), ('B', 'C', 'B'), ('B', 'C', 'C'),\
- ('C', 'A', 'A'), ('C', 'A', 'B'), ('C', 'A', 'C'),\
- ('C', 'B', 'A'), ('C', 'B', 'B'), ('C', 'B', 'C'),\
- ('C', 'C', 'A'), ('C', 'C', 'B'), ('C', 'C', 'C')]
+    >>> list(product(range(3), range(3), range(3)))
+    [(0, 0, 0), (0, 0, 1), (0, 0, 2), (0, 1, 0), (0, 1, 1),\
+ (0, 1, 2), (0, 2, 0), (0, 2, 1), (0, 2, 2), (1, 0, 0),\
+ (1, 0, 1), (1, 0, 2), (1, 1, 0), (1, 1, 1), (1, 1, 2),\
+ (1, 2, 0), (1, 2, 1), (1, 2, 2), (2, 0, 0), (2, 0, 1),\
+ (2, 0, 2), (2, 1, 0), (2, 1, 1), (2, 1, 2), (2, 2, 0),\
+ (2, 2, 1), (2, 2, 2)]
     """
     lst = []
-    for rep in range(repeat):
-        for i in args:
-            lst.append(tuple(i))
+    for i in args:
+        lst.append(tuple(i))
     lst2 = [[]]
     for elem0 in lst:
         for elem1 in lst2:
             for elem2 in elem0:
                 lst2 = lst2 + [elem1+[elem2]]
-    new_lst = [elem3 for elem3 in lst2 if len(elem3) == (len(args)*repeat)]
+    new_lst = [elem3 for elem3 in lst2 if len(elem3) == (len(args))]
     for elem4 in new_lst:
         yield tuple(elem4)
 
+def permutations(iterable, length=None):
+    if length is None:                  # If length is not specified,
+        length = len(list(iterable))    # we assign it as length of our iterable
+    if length > len(list(iterable)):
+        # print "Your r cannot be longer than length of the iterable"
+        return # If the length is longer length of our iterable, it is a mistake
+                # so we return nothing
+    list_of_index = list(range(len(list(iterable))))
+    list_of_cycles = list(
+        range(len(list(iterable)), len(list(iterable))-length, -1))
+    yield(tuple(list(iterable)[i] for i in list_of_index[:length]))
+    # Yielding the first tuple of possible permutations,
+    # which will be output in a correct order as it is only our first
+    # return and we are not changing the order so far
+    while len(list(iterable)):
+        for i in reversed(range(length)):
+            list_of_cycles[i] -= 1
+            if list_of_cycles[i] == 0:
+                list_of_index[i:] = list_of_index[i+1:] + list_of_index[i:i+1]
+                list_of_cycles[i] = len(list(iterable)) - i
+            else:
+                j = list_of_cycles[i]
+                list_of_index[i], list_of_index[-j] = list_of_index[-j], list_of_index[i]
+                yield(tuple(list(iterable)[i] for i in list_of_index[:length]))
+                break
+        else:
+            return
 
 
 def combinations(r, n):
@@ -123,15 +147,20 @@ def combinations(r, n):
         yield tuple(i for i in ourange)
 
 
-
 def combinations_with_replacement(string_of_elements, amount_of_el):
-    #Imploments an analogue of itertools combinations with replacement
-    index_list = [0] * amount_of_el
-    list_of_elements = tuple(string_of_elements)
-    edge_of_elements = len(list_of_elements) - 1
-    yield tuple(list_of_elements[i] for i in index_list)
-    while index_list != [edge_of_elements] * amount_of_el:
-        for index in range(amount_of_el - 1, -1, -1):
-            if index_list[index] != edge_of_elements: break
-        index_list[index:] = [index_list[index] + 1] * (amount_of_el - index)
-        yield tuple(list_of_elements[i] for i in index_list)
+    """
+    Implements an analogue of itertools combinations with replacement
+    """
+    index_list = [0] * amount_of_el # making an empty list to make combinations easily
+    list_of_elements = tuple(string_of_elements) # splitting elements to make combinations with them
+    edge_of_elements = len(list_of_elements) - 1 # the last index of the list string_of_elements
+    yield tuple(list_of_elements[i] for i in index_list)    # records the first combination
+    while index_list != [edge_of_elements] * amount_of_el:  # while we didn't reach the last element of
+                                                            # string_of_elements to make combinations with them
+        for index in range(amount_of_el - 1, -1, -1): # iterating in reversed index_list and if...
+            if index_list[index] != edge_of_elements: break # an element with a particular
+                                                            # index isn't out of range...
+        index_list[index:] = [index_list[index] + 1] * (amount_of_el - index) # we make a combination on that position
+                                                            # and if an element is out of range, we move on to the next
+                                                            # element in a reversed index_list
+        yield tuple(list_of_elements[i] for i in index_list) # records each combination
