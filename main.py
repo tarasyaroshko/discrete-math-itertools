@@ -40,7 +40,7 @@ def repeat(value):
 
 def product(*args):
     """
-    Return the cartesian product of input iterables.
+    Return the cartesian product of input iterables. 
     >>> list(product('ABCD', 'xy', '12'))
     [('A', 'x', '1'), ('A', 'x', '2'), ('A', 'y', '1'),\
  ('A', 'y', '2'), ('B', 'x', '1'), ('B', 'x', '2'),\
@@ -48,6 +48,13 @@ def product(*args):
  ('C', 'x', '2'), ('C', 'y', '1'), ('C', 'y', '2'),\
  ('D', 'x', '1'), ('D', 'x', '2'), ('D', 'y', '1'),\
  ('D', 'y', '2')]
+    >>> list(product(range(3), range(3), range(3)))
+    [(0, 0, 0), (0, 0, 1), (0, 0, 2), (0, 1, 0), (0, 1, 1),\
+ (0, 1, 2), (0, 2, 0), (0, 2, 1), (0, 2, 2), (1, 0, 0),\
+ (1, 0, 1), (1, 0, 2), (1, 1, 0), (1, 1, 1), (1, 1, 2),\
+ (1, 2, 0), (1, 2, 1), (1, 2, 2), (2, 0, 0), (2, 0, 1),\
+ (2, 0, 2), (2, 1, 0), (2, 1, 1), (2, 1, 2), (2, 2, 0),\
+ (2, 2, 1), (2, 2, 2)]
     """
     lst = []
     for i in args:
